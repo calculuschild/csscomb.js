@@ -249,52 +249,54 @@ class Comb {
    * @param {Object} options
    * @return {Comb}
    */
-  use(options) {
-    // Check whether plugin with the same is already used.
-    let pluginName = options.name;
-    if (this._pluginAlreadyUsed(pluginName)) {
-      if (this.verbose)
-        console.warn(Errors.twoPluginsWithSameName(pluginName));
-      return;
-    }
+   use(options) {
+     // Check whether plugin with the same is already used.
+     let unsortedPlugins = [];
+     options.forEach(option => {
 
-    let plugin = new Plugin(options);
+       let pluginName = option.name;
 
-    plugin.syntax.forEach(function(s) {
-      this.supportedSyntaxes.add(s);
-    }, this);
+       if (this._pluginAlreadyUsed(pluginName)) {
+         if (this.verbose) console.warn(Errors.twoPluginsWithSameName(pluginName));
+         return;
+       }
 
-    // Sort plugins.
-    let pluginToRunBefore = plugin.runBefore;
+       let plugin = new Plugin(option);
+       plugin.syntax.forEach(function (s) {
+         this.supportedSyntaxes.add(s);
+       }, this);
 
-    if (!pluginToRunBefore) {
-      this.plugins.push(plugin);
-    } else {
-      if (this._pluginAlreadyUsed(pluginToRunBefore)) {
-        let i = this._pluginIndex(pluginToRunBefore);
-        this.plugins.splice(i, 0, plugin);
-      } else {
-        this.plugins.push(plugin);
-        if (!this.pluginsDependencies[pluginToRunBefore])
-          this.pluginsDependencies[pluginToRunBefore] = [];
-        this.pluginsDependencies[pluginToRunBefore].push(pluginName);
-      }
-    }
+       unsortedPlugins.push(plugin);
+     });
 
-    let dependents = this.pluginsDependencies[pluginName];
-    if (!dependents) return this;
+     unsortedPlugins.forEach(plugin => {
+       this._insertPlugin(plugin, unsortedPlugins);
+     });
 
-    for (let i = 0, l = dependents.length; i < l; i++) {
-      let name = dependents[i];
-      let x = this._pluginIndex(name);
-      let plugin = this.plugins[x];
-      this.plugins.splice(x, 1);
-      this.plugins.splice(-1, 0, plugin);
-    }
+     return this;
+   }
 
-    // Chaining.
-    return this;
-  }
+   _insertPlugin(plugin, unsortedPlugins) {
+     if (this._pluginAlreadyUsed(plugin.name)) {
+       return;
+     }
+
+     let nextPluginName = plugin.runBefore;
+
+     if (!nextPluginName || !unsortedPlugins.find(p => p.name == nextPluginName)) {
+       this.plugins.push(plugin);
+       return;
+     }
+
+     if (this._pluginAlreadyUsed(nextPluginName)) {
+       let i = this._pluginIndex(nextPluginName);
+       this.plugins.splice(i, 0, plugin);
+       return;
+     }
+
+     let nextPlugin = unsortedPlugins.find(p => p.name == nextPluginName);
+     this._insertPlugin(nextPlugin, unsortedPlugins);
+   }
 
   _getAcceptableFilesFromDirectory(path) {
     if (!this._shouldProcess(path)) return;

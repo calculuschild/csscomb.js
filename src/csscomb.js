@@ -15,11 +15,10 @@ let CSScomb = function(config) {
   let comb = new Comb();
 
   // Add plugins.
-  fs.readdirSync(__dirname + '/options').map(function(option) {
+  let options = fs.readdirSync(__dirname + '/options').map(function (option) {
     return require('./options/' + option);
-  }).forEach(function(option) {
-    comb.use(option);
   });
+  comb.use(options);
 
   // If config was passed, configure:
   if (typeof config === 'string') {
