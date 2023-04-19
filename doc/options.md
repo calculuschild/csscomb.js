@@ -30,6 +30,8 @@ Here is a full list in the same order they are applied while processing css:
 - [tab-size](#tab-size)
 - [vendor-prefix-align](#vendor-prefix-align)
 - [lines-between-rulesets](#lines-between-rulesets)
+- [align-colons](#align-colons)
+- [inline-single-declarations](#inline-single-declarations)
 
 Following options are ignored while processing `*.sass` files:
 
@@ -952,6 +954,58 @@ Example: `{ "lines-between-rulesets":  1}`
         width: 50px;
     }
 }
+```
+
+## align colons
+
+Aligns colons `:` in declarations within the same block. Maintains minimum spacing set by `space-before-colon` and `space-after-colon`.
+
+Acceptable value: `true`.
+
+Example: `{ "align-colons": true }`
+
+```scss
+// Before:
+a {
+    top : 0;
+    color : tomato;
+    visibility : hidden;
+}
+
+// After:
+a {
+    top        : 0;
+    color      : tomato;
+    visibility : hidden;
+}
+```
+
+## inline-single-declarations
+
+Moves single declarations within a block to be inline with the selector.
+
+Acceptable value: `true`.
+
+Example: `{ "inline-single-declarations": true }`
+
+```scss
+// Before:
+a {
+    top : 0;
+    color : tomato;
+}
+
+b {
+  color: blue;
+}
+
+// After:
+a {
+    top : 0;
+    color : tomato;
+}
+
+b {color : blue;}
 ```
 
 ## verbose
