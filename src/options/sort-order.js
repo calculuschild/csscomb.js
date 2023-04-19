@@ -171,7 +171,10 @@ module.exports = {
 
   _getSortablePropertyName(node) {
     if (node.is('declaration')) {
-      let property = node.first('property').first();
+      let property = node.first('property');
+      if (property === null) property = node.first('customProperty');
+
+      property = property.first();
       return property.is('variable') ? '$variable' : property.content;
     }
 
@@ -382,6 +385,14 @@ module.exports = {
     a = a.node.first().first().content;
     b = b.node.first().first().content;
 
+    if (Array.isArray(a)) {
+      a = a[0].content;
+    }
+
+    if (Array.isArray(b)) {
+      b = b[0].content;
+    }
+
     // Get prefix and unprefixed part. For example:
     // ['-o-animation', '-o-', 'animation']
     // ['color', '', 'color']
@@ -391,14 +402,19 @@ module.exports = {
     if (a[2] !== b[2]) {
       // If unprefixed parts are different (i.e. `border` and
       // `color`), compare them:
-      return a[2] <= b[2] ? -1 : 1;
-    } else {
-      // If unprefixed parts are identical (i.e. `border` in
-      // `-moz-border` and `-o-border`), compare prefixes.
-      // They should go in the same order they are set
-      // in `prefixes` array.
-      return prefixes.indexOf(a[1]) <= prefixes.indexOf(b[1]) ? -1 : 1;
+      return a[2] < b[2] ? -1 : 1;
     }
+
+    // If unprefixed parts are identical (i.e. `border` in
+    // `-moz-border` and `-o-border`), compare prefixes.
+    // They should be untouched if they are equal:
+    if (prefixes.indexOf(a[1]) === prefixes.indexOf(b[1])) {
+      return 0;
+    }
+
+    // They should go in the same order they are set
+    // in `prefixes` array.
+    return prefixes.indexOf(a[1]) < prefixes.indexOf(b[1]) ? -1 : 1;
   },
 
   _sortNodes(nodes) {
