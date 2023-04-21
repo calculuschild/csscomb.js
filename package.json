@@ -21,7 +21,7 @@
     "gonzales-pe": "4.2.4",
     "minimatch": "3.0.4",
     "minimist": "1.2.0",
-    "vow": "0.4.19",
+    "vow": "0.4.20",
     "vow-fs": "0.3.6"
   },
   "devDependencies": {
