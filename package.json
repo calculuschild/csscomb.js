@@ -46,6 +46,7 @@
     "csscomb": "./bin/csscomb"
   },
   "scripts": {
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "install": "node scripts/build.js"
   }
 }
