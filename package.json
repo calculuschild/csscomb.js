@@ -39,7 +39,8 @@
   "files": [
     "bin",
     "config",
-    "lib"
+    "lib",
+    "src"
   ],
   "bin": {
     "csscomb": "./bin/csscomb"
