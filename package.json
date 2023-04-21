@@ -40,7 +40,8 @@
     "bin",
     "config",
     "lib",
-    "src"
+    "src",
+    "scripts"
   ],
   "bin": {
     "csscomb": "./bin/csscomb"
