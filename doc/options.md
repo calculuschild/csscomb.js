@@ -954,6 +954,56 @@ Example: `{ "lines-between-rulesets":  1}`
 }
 ```
 
+## align-colons
+
+Aligns colons for declarations within the same block. Keeps minimum spacing set by `space-before-colon` and `space-after-colon`.
+
+Acceptable value: `true`.
+
+Example: `{ "align-colons":  true}`
+
+```scss
+// Before:
+.foo {
+  color : red;
+  padding : 2px;
+  visibility : hidden;
+}
+
+// After:
+.foo {
+  color      : red;
+  padding    : 2px;
+  visibility : hidden;
+}
+```
+
+## inline-single-declarations
+
+Moves blocks with single declarations into one line.
+
+Acceptable value: `true`.
+
+Example: `{ "align-colons":  true}`
+
+```scss
+// Before:
+.foo {
+  color : red;
+  padding : 2px;
+}
+.bar {
+  visibility : hidden;
+}
+
+// After:
+.foo {
+  color : red;
+  padding : 2px;
+}
+.bar {visibility : hidden;}
+```
+
 ## verbose
 
 Whether to use `--verbose` option in CLI.
