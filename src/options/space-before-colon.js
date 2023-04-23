@@ -5,7 +5,7 @@ var gonzales = require('gonzales-pe');
 module.exports = {
   name: 'space-before-colon',
 
-  runBefore: 'block-indent',
+  runBefore: 'align-colons',
 
   syntax: ['css', 'less', 'sass', 'scss'],
 

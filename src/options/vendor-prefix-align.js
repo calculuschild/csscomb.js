@@ -265,7 +265,7 @@ module.exports = (function() {
 
   return {
     name: 'vendor-prefix-align',
-
+    runBefore: 'align-colons',
     syntax: ['css', 'less', 'sass', 'scss'],
 
     accepts: {
